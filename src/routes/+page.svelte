@@ -37,8 +37,25 @@
 		reader.onload = function (event) {
 			console.log('dropped');
 			const imageObj = new Image();
+
 			imageObj.onload = function () {
-				ctx.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
+				const hRatio = canvas.width / imageObj.width;
+				const vRatio = canvas.height / imageObj.height;
+				const ratio = Math.min(hRatio, vRatio);
+				const centerShift_x = (canvas.width - imageObj.width * ratio) / 2;
+				const centerShift_y = (canvas.height - imageObj.height * ratio) / 2;
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				ctx.drawImage(
+					imageObj,
+					0,
+					0,
+					imageObj.width,
+					imageObj.height,
+					centerShift_x,
+					centerShift_y,
+					imageObj.width * ratio,
+					imageObj.height * ratio
+				);
 			};
 			imageObj.src = event.target.result;
 		};
