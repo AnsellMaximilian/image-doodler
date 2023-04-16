@@ -8,15 +8,15 @@
 
 	onMount(() => {
 		ctx = canvas.getContext('2d');
-		canvas.width = 500;
+		canvas.width = window.innerWidth - 300;
 		canvas.height = 500;
 		ctx.strokeStyle = '#000000';
-		ctx.lineWidth = 5;
+		ctx.lineWidth = 3;
 	});
 
 	function startDrawing(e) {
 		ctx.beginPath();
-		ctx.moveTo(e.clientX, e.clientY);
+		ctx.moveTo(e.offsetX, e.offsetY);
 		canvas.addEventListener('mousemove', draw);
 	}
 
@@ -25,8 +25,9 @@
 	}
 
 	function draw(e) {
-		ctx.lineTo(e.clientX, e.clientY);
+		ctx.lineTo(e.offsetX, e.offsetY);
 		ctx.stroke();
+		console.log('drawing');
 	}
 
 	async function handleDrop(event) {
@@ -68,13 +69,26 @@
 	}
 </script>
 
-<div>
-	<div on:drop={handleDrop} on:dragover={handleDragOver}>Drop image here</div>
-	<canvas
-		class="border-2 border-black"
-		bind:this={canvas}
-		on:mousedown={startDrawing}
-		on:mouseup={stopDrawing}
-		on:mouseleave={stopDrawing}
-	/>
-</div>
+<main>
+	<header class="bg-blue-900 h-12">
+		<nav class="h-full py-2 px-8 flex items-center text-white">
+			<h1>Image Doodler</h1>
+		</nav>
+	</header>
+	<div class="p-8 flex gap-2">
+		<div
+			on:drop={handleDrop}
+			on:dragover={handleDragOver}
+			class="border-2 border-gray-600 bg-gray-500 text-white p-4"
+		>
+			Drop image here
+		</div>
+		<canvas
+			class="border-2 border-gray-600 bg-white"
+			bind:this={canvas}
+			on:mousedown={startDrawing}
+			on:mouseup={stopDrawing}
+			on:mouseleave={stopDrawing}
+		/>
+	</div>
+</main>
